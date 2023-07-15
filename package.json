@@ -1,0 +1,20 @@
+{
+  "name": "youtube-mp3-downloader",
+  "version": "1.0.0",
+  "description": "A web app that downloads MP3s from YouTube and saves them to an S3 bucket",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "aws-sdk": "^2.1030.0",
+    "ffmpeg-static": "^4.4.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "ytdl-core": "^4.9.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
+}
