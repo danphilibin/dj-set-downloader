@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "A web app that downloads MP3s from YouTube and saves them to an S3 bucket",
   "main": "src/index.js",
+{
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "jest",
-    "deploy": "fly deploy",
-    "dl": "ts-node src/runDownload.ts"
-  },
-  "dependencies": {
+    "test": "ts-node src/runDownload.ts",
+    "deploy": "fly deploy"
+  }
+}
     "express": "^4.17.1",
     "aws-sdk": "^2.1030.0"
   },
