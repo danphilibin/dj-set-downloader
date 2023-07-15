@@ -10,10 +10,10 @@ export const uploadToS3 = async (filename: string): Promise<void> => {
   const fileContent = fs.readFileSync(filename);
 
   const params = {
-    Bucket: process.env.BUCKET_NAME,
-    Key: filename,
-    Body: fileContent,
-  };
+  Bucket: process.env.BUCKET_NAME,
+  Key: `dj-set-downloader/${filename}`,
+  Body: fileContent,
+};
 
   try {
     const data = await s3.upload(params).promise();
