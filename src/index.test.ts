@@ -13,7 +13,7 @@ jest.mock('fs', () => ({
 
 describe('downloadFromYoutube', () => {
   it('should call exec with the correct arguments', () => {
-    const url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+    const url = 'https://www.youtube.com/watch?v=C0DPdy98e4c';
     const filename = 'output.mp3';
 
     downloadFromYoutube(url, filename, () => {});
@@ -27,7 +27,7 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'output.mp3', callback);
+    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3', callback);
 
     expect(callback).toHaveBeenCalledWith(null, true);
   });
@@ -37,7 +37,7 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'output.mp3', callback);
+    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3', callback);
 
     expect(callback).toHaveBeenCalledWith(new Error('File does not exist'), false);
   });
