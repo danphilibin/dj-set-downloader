@@ -1,24 +1,19 @@
-import AWS from 'aws-sdk';
-import fs from 'fs';
+import AWS from "aws-sdk";
+import fs from "fs";
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.ACCESS_KEY_SECRET
+  secretAccessKey: process.env.ACCESS_KEY_SECRET,
 });
 
 export const uploadToS3 = async (filename: string): Promise<void> => {
   const fileContent = fs.readFileSync(filename);
 
-  const bucketName = process.env.BUCKET_NAME;
-if (typeof bucketName !== 'string') {
-  throw new Error('Bucket name is not defined or not a string');
-}
-
-const params = {
-  Bucket: bucketName,
-  Key: filename,
-  Body: fileContent
-};
+  const params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key: filename,
+    Body: fileContent,
+  };
 
   try {
     const data = await s3.upload(params).promise();
