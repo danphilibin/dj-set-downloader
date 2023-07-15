@@ -23,7 +23,7 @@ describe('downloadFromYoutube', () => {
   });
 
 
-  it('should call the callback with true if the file exists', () => {
+  it('should call the callback with true if the file exists', async () => {
     (existsSync as jest.Mock).mockReturnValueOnce(true);
 
     const callback = jest.fn();
@@ -35,7 +35,7 @@ describe('downloadFromYoutube', () => {
     expect(callback).toHaveBeenCalledWith(null, true);
   });
 
-  it('should call the callback with an error if the file does not exist', () => {
+  it('should call the callback with an error if the file does not exist', async () => {
     (existsSync as jest.Mock).mockReturnValueOnce(false);
 
     const callback = jest.fn();
