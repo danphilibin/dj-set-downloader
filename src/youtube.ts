@@ -10,12 +10,15 @@ export const downloadFromYoutube = (url: string): Promise<boolean> => {
         return;
       }
 
-      const outputFilename = stdout.split('\n').find(line => line.includes('[download] Destination:'));
-      if (outputFilename && existsSync(outputFilename.split(': ')[1])) {
-        resolve(true);
-      } else {
-        console.error('File does not exist');
-        reject(new Error('File does not exist'));
+      let outputFilename = stdout.split('\n').find(line => line.includes('[download] Destination:'));
+      if (outputFilename) {
+        outputFilename = outputFilename.split(': ')[1].replace('.webm', '.mp3');
+        if (existsSync(outputFilename)) {
+          resolve(true);
+        } else {
+          console.error('File does not exist');
+          reject(new Error('File does not exist'));
+        }
       }
     });
   });
