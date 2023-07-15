@@ -16,7 +16,8 @@ describe('downloadFromYoutube', () => {
     const url = 'https://www.youtube.com/watch?v=C0DPdy98e4c';
     const filename = 'output.mp3';
 
-    await downloadFromYoutube(url, filename);
+    const result = await downloadFromYoutube(url, filename);
+    expect(result).toBe(true);
 
     expect(exec).toHaveBeenCalledWith(`yt-dlp -f "bestaudio/best" -x --audio-format mp3 --add-metadata -o ${filename} ${url}`, expect.any(Function));
   });
@@ -27,7 +28,9 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
+    const result = await downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
+    expect(result).toBe(false);
+    expect(result).toBe(true);
 
     expect(callback).toHaveBeenCalledWith(null, true);
   });
@@ -37,7 +40,8 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
+    const result = await downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
+    expect(result).toBe(true);
 
     expect(callback).toHaveBeenCalledWith(new Error('File does not exist'), false);
   });
