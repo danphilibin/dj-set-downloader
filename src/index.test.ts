@@ -1,5 +1,6 @@
 import { downloadFromYoutube } from './index';
-import { exec } from 'child_process';
+import { exec as execOriginal } from 'child_process';
+const exec = execOriginal as jest.MockedFunction<typeof execOriginal>;
 import { existsSync } from 'fs';
 
 jest.mock('child_process', () => ({
