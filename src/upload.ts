@@ -19,8 +19,9 @@ export const uploadToS3 = async (filename: string): Promise<void> => {
   };
 
   try {
+    console.log(`Starting upload to S3 for file: ${filename}`);
     const data = await s3.upload(params).promise();
-    console.log(`File uploaded successfully. ${data.Location}`);
+    console.log(`File uploaded successfully. S3 Location: ${data.Location}`);
   } catch (err) {
     console.error(`Error uploading file: ${err}`);
   }
