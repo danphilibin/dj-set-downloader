@@ -1,7 +1,7 @@
 import { downloadFromYoutube } from "./youtube";
 import { exec as execOriginal } from "child_process";
 const exec = execOriginal as jest.MockedFunction<typeof execOriginal>;
-import { existsSync } from "fs";
+import { existsSync, unlinkSync } from "fs";
 
 jest.mock("child_process", () => ({
   exec: jest.fn(),
@@ -18,5 +18,8 @@ describe("downloadFromYoutube", () => {
 
     const result = await downloadFromYoutube(url, filename);
     expect(result).toBe(true);
+
+    // Remove the file after the test
+    unlinkSync(filename);
   });
 });
