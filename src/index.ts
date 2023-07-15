@@ -11,6 +11,10 @@ app.post('/download', (req, res) => {
   res.send('Download started');
 });
 
+app.get('/healthcheck', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
