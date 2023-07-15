@@ -8,7 +8,7 @@ const host = '0.0.0.0';
 
 app.use(express.json());
 
-const downloadFromYoutube = (url: string, filename: string, callback: (error: any, exists: boolean) => void) => {
+export const downloadFromYoutube = (url: string, filename: string, callback: (error: any, exists: boolean) => void) => {
   exec(`yt-dlp -f "bestaudio/best" -x --audio-format mp3 --add-metadata -o ${filename} ${url}`, (error) => {
     if (error) {
       console.error(`exec error: ${error}`);
