@@ -1,5 +1,6 @@
-import { exec } from 'child_process';
-import { existsSync } from 'fs';
+import { exec, existsSync } from 'child_process';
+import { existsSync, unlinkSync } from 'fs';
+import { uploadToS3 } from './upload';
 
 export const downloadFromYoutube = (url: string): Promise<{ success: boolean; filename: string }> => {
   return new Promise((resolve, reject) => {
@@ -14,7 +15,15 @@ export const downloadFromYoutube = (url: string): Promise<{ success: boolean; fi
       if (outputFilename) {
         outputFilename = outputFilename.split(': ')[1].replace('.webm', '.mp3');
         if (existsSync(outputFilename)) {
-          resolve({ success: true, filename: outputFilename });
+          uploadToS3(outputFilename)
+            .then(() => {
+              unlinkSync(outputFilename);
+              resolve({ success: true, filename: outputFilename });
+            })
+            .catch((uploadErr) => {
+              console.error(`Error uploading file: ${uploadErr}`);
+              reject({ success: false, filename: '' });
+            });
         } else {
           console.error('File does not exist');
           reject({ success: false, filename: '' });
