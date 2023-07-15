@@ -23,7 +23,7 @@ describe('downloadFromYoutube', () => {
 
   it('should call the callback with an error if exec fails', () => {
     const error = new Error('exec error');
-    (exec as jest.Mock).mockImplementationOnce((command, callback) => callback(error));
+    (exec as jest.MockedFunction<typeof execOriginal>).mockImplementationOnce((command, callback) => callback(error));
 
     const callback = jest.fn();
 
