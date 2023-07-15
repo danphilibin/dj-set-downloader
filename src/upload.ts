@@ -14,7 +14,7 @@ export const uploadToS3 = async (filename: string): Promise<void> => {
 
   const params = {
     Bucket: process.env.BUCKET_NAME,
-    Key: `dj-set-downloader/${filename}`,
+    Key: `dj-sets/${filename}`,
     Body: fileContent,
   };
 
