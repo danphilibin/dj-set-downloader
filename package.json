@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "jest",
-    "deploy": "fly deploy"
+    "deploy": "fly deploy",
+    "run": "ts-node src/runDownload.ts"
   },
   "dependencies": {
     "express": "^4.17.1",
