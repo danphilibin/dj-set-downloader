@@ -9,10 +9,8 @@ app.use(express.json());
 
 app.post('/download', async (req, res) => {
   const url = req.body.url;
-  const filename = 'output.mp3';
-
   try {
-    const exists = await downloadFromYoutube(url, filename);
+    const exists = await downloadFromYoutube(url);
     if (exists) {
       res.send('OK');
     } else {

@@ -14,9 +14,7 @@ jest.mock("fs", () => ({
 describe("downloadFromYoutube", () => {
   it("should call exec with the correct arguments", async () => {
     const url = "https://www.youtube.com/watch?v=C0DPdy98e4c";
-    const filename = "output.mp3";
-
-    const result = await downloadFromYoutube(url, filename);
+    const result = await downloadFromYoutube(url);
     expect(result).toBe(true);
 
     // Remove the file after the test
