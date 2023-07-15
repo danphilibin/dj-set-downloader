@@ -1,13 +1,16 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.ACCESS_KEY_SECRET
+});
 
-export const uploadToS3 = async (filename: string, bucketName: string): Promise<void> => {
+export const uploadToS3 = async (filename: string): Promise<void> => {
   const fileContent = fs.readFileSync(filename);
 
   const params = {
-    Bucket: bucketName,
+    Bucket: process.env.BUCKET_NAME,
     Key: filename,
     Body: fileContent
   };
