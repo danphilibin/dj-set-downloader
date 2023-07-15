@@ -12,11 +12,11 @@ jest.mock('fs', () => ({
 }));
 
 describe('downloadFromYoutube', () => {
-  it('should call exec with the correct arguments', () => {
+  it('should call exec with the correct arguments', async () => {
     const url = 'https://www.youtube.com/watch?v=C0DPdy98e4c';
     const filename = 'output.mp3';
 
-    downloadFromYoutube(url, filename, () => {});
+    await downloadFromYoutube(url, filename);
 
     expect(exec).toHaveBeenCalledWith(`yt-dlp -f "bestaudio/best" -x --audio-format mp3 --add-metadata -o ${filename} ${url}`, expect.any(Function));
   });

@@ -11,15 +11,16 @@ app.post('/download', async (req, res) => {
   const url = req.body.url;
   const filename = 'output.mp3';
 
-  downloadFromYoutube(url, filename, (error, exists) => {
-    if (error) {
-      res.send('ERROR');
-    } else if (exists) {
+  try {
+    const exists = await downloadFromYoutube(url, filename);
+    if (exists) {
       res.send('OK');
     } else {
       res.send('ERROR');
     }
-  });
+  } catch (error) {
+    res.send('ERROR');
+  }
 });
 
 app.get('/healthcheck', (req, res) => {
