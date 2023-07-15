@@ -1,28 +1,24 @@
-import express from 'express';
-import { downloadFromYoutube } from './youtube';
+import express from "express";
+import { downloadFromYoutube } from "./youtube";
 
 const app = express();
 const port = 3000;
-const host = '0.0.0.0';
+const host = "0.0.0.0";
 
 app.use(express.json());
 
-app.post('/download', async (req, res) => {
+app.post("/download", async (req, res) => {
   const url = req.body.url;
   try {
     const exists = await downloadFromYoutube(url);
-    if (exists) {
-      res.send('OK');
-    } else {
-      res.send('ERROR');
-    }
+    res.json(exists);
   } catch (error) {
-    res.send('ERROR');
+    res.send("ERROR");
   }
 });
 
-app.get('/healthcheck', (req, res) => {
-  res.status(200).send('OK');
+app.get("/healthcheck", (req, res) => {
+  res.status(200).send("OK");
 });
 
 app.listen(port, host, () => {
