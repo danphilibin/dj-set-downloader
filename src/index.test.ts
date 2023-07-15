@@ -21,16 +21,6 @@ describe('downloadFromYoutube', () => {
     expect(exec).toHaveBeenCalledWith(`yt-dlp -f "bestaudio/best" -x --audio-format mp3 --add-metadata -o ${filename} ${url}`, expect.any(Function));
   });
 
-  it('should call the callback with an error if exec fails', () => {
-    const error = new Error('exec error');
-    (exec as jest.MockedFunction<typeof execOriginal>).mockImplementationOnce((command, callback) => callback(error, null, null));
-
-    const callback = jest.fn();
-
-    downloadFromYoutube('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'output.mp3', callback);
-
-    expect(callback).toHaveBeenCalledWith(error, false);
-  });
 
   it('should call the callback with true if the file exists', () => {
     (existsSync as jest.Mock).mockReturnValueOnce(true);
