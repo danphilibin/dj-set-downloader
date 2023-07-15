@@ -27,7 +27,7 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3', callback);
+    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
 
     expect(callback).toHaveBeenCalledWith(null, true);
   });
@@ -37,7 +37,7 @@ describe('downloadFromYoutube', () => {
 
     const callback = jest.fn();
 
-    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3', callback);
+    downloadFromYoutube('https://www.youtube.com/watch?v=C0DPdy98e4c', 'output.mp3');
 
     expect(callback).toHaveBeenCalledWith(new Error('File does not exist'), false);
   });
