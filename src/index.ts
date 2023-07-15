@@ -8,21 +8,33 @@ const host = '0.0.0.0';
 
 app.use(express.json());
 
-app.post('/download', async (req, res) => {
-  const url = req.body.url;
-  const filename = 'output.mp3';
-
+const downloadFromYoutube = (url: string, filename: string, callback: (error: any, exists: boolean) => void) => {
   exec(`yt-dlp -f "bestaudio/best" -x --audio-format mp3 --add-metadata -o ${filename} ${url}`, (error) => {
     if (error) {
       console.error(`exec error: ${error}`);
-      res.send('ERROR');
+      callback(error, false);
       return;
     }
 
     if (existsSync(filename)) {
-      res.send('OK');
+      callback(null, true);
     } else {
       console.error('File does not exist');
+      callback(new Error('File does not exist'), false);
+    }
+  });
+};
+
+app.post('/download', async (req, res) => {
+  const url = req.body.url;
+  const filename = 'output.mp3';
+
+  downloadFromYoutube(url, filename, (error, exists) => {
+    if (error) {
+      res.send('ERROR');
+    } else if (exists) {
+      res.send('OK');
+    } else {
       res.send('ERROR');
     }
   });
