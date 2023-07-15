@@ -5,8 +5,8 @@ import "./envVars";
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.ACCESS_KEY_SECRET,
-  endpoint: "https://s3.us-west-004.backblazeb2.com",
-  region: "us-west-004",
+  endpoint: process.env.S3_ENDPOINT,
+  region: process.env.S3_REGION,
 });
 
 export const uploadToS3 = async (filename: string): Promise<void> => {
