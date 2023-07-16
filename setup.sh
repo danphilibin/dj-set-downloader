@@ -14,8 +14,8 @@ echo "Please enter the values for the secrets in .env.sample:"
 read -p "ACCESS_KEY_ID: " ACCESS_KEY_ID
 read -p "ACCESS_KEY_SECRET: " ACCESS_KEY_SECRET
 read -p "BUCKET_NAME: " BUCKET_NAME
-read -p "S3_ENDPOINT: " S3_ENDPOINT
-read -p "S3_REGION: " S3_REGION
+read -p "S3_ENDPOINT (optional): " S3_ENDPOINT
+read -p "S3_REGION (optional): " S3_REGION
 
 # Write the entered values to .env
 echo "ACCESS_KEY_ID=$ACCESS_KEY_ID" > .env
