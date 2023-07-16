@@ -1,11 +1,12 @@
 import express from "express";
+import bodyParser from "body-parser";
 import { downloadFromYoutube } from "./youtube";
 
 const app = express();
 const port = 3000;
 const host = "0.0.0.0";
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 app.post("/", async (req, res) => {
   const url = req.body.url;
