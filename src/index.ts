@@ -1,23 +1,39 @@
-import express from "express";
-import bodyParser from "body-parser";
-import { downloadFromYoutube } from "./youtube";
-import { listFilesInS3 } from "./upload";
+import express from 'express';
+import bodyParser from 'body-parser';
+import { downloadFromYoutube } from './youtube';
+import { listFilesInS3 } from './upload';
 
 const app = express();
 const port = 3000;
-const host = "0.0.0.0";
+const host = '0.0.0.0';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/", async (req, res) => {
-  const url = req.body.url;
-  try {
-    const exists = await downloadFromYoutube(url);
-    res.json(exists);
-  } catch (error) {
-    res.send("ERROR");
+let downloadQueue = [];
+let isDownloading = false;
+
+const processQueue = async () => {
+  if (isDownloading || downloadQueue.length === 0) {
+    return;
   }
+  isDownloading = true;
+  const url = downloadQueue[0];
+  try {
+    await downloadFromYoutube(url);
+    downloadQueue = downloadQueue.slice(1);
+  } catch (error) {
+    console.error(`Error downloading: ${error}`);
+  }
+  isDownloading = false;
+  processQueue();
+};
+
+app.post('/', (req, res) => {
+  const url = req.body.url;
+  downloadQueue.push(url);
+  processQueue();
+  res.json({ message: 'Download started' });
 });
 
 app.get("/", (req, res) => {
