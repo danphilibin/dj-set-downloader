@@ -1,11 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import { downloadFromYoutube } from './youtube';
-import { listFilesInS3 } from './upload';
+import express from "express";
+import bodyParser from "body-parser";
+import { downloadFromYoutube } from "./youtube";
+import { listFilesInS3 } from "./upload";
 
 const app = express();
 const port = 3000;
-const host = '0.0.0.0';
+const host = "0.0.0.0";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,9 +13,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let downloadQueue: string[] = [];
 let isDownloading = false;
 
+process.on("uncaughtException", (error) => {
+  console.error(error);
+  process.exit(1);
+});
+
 const processQueue = async () => {
-  if (isDownloading || downloadQueue.length === 0) {
+  if (isDownloading) {
     return;
+  }
+  if (downloadQueue.length === 0) {
+    process.exit(0);
   }
   isDownloading = true;
   const url = downloadQueue[0];
@@ -29,11 +37,11 @@ const processQueue = async () => {
   processQueue();
 };
 
-app.post('/', (req, res) => {
+app.post("/", (req, res) => {
   const url = req.body.url;
   downloadQueue.push(url);
   processQueue();
-  res.json({ message: 'Download started' });
+  res.json({ message: "Download started" });
 });
 
 app.get("/", (req, res) => {
@@ -46,11 +54,11 @@ app.get("/files", async (req, res) => {
     if (files.length === 0) {
       res.send("No files");
     } else {
-      let html = '<table>';
-      files.forEach(file => {
+      let html = "<table>";
+      files.forEach((file) => {
         html += `<tr><td>${file}</td></tr>`;
       });
-      html += '</table>';
+      html += "</table>";
       res.send(html);
     }
   } catch (error) {
