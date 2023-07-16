@@ -1,5 +1,10 @@
 import { Upload } from "@aws-sdk/lib-storage";
-import { CompleteMultipartUploadCommand, ListObjectsCommand, S3Client, ListObjectsCommandOutput } from "@aws-sdk/client-s3";
+import {
+  CompleteMultipartUploadCommand,
+  ListObjectsCommand,
+  S3Client,
+  ListObjectsCommandOutput,
+} from "@aws-sdk/client-s3";
 import fs from "fs";
 import "./envVars";
 
@@ -15,12 +20,12 @@ const s3 = new S3Client({
 export const listFilesInS3 = async (): Promise<string[]> => {
   const params = {
     Bucket: process.env.BUCKET_NAME,
-    Prefix: 'dj-sets/'
+    Prefix: "dj-sets/",
   };
 
   const command = new ListObjectsCommand(params);
-  const response = await s3.send(command) as ListObjectsCommandOutput;
-  return response.Contents?.map(file => file.Key || '') || [];
+  const response = (await s3.send(command)) as ListObjectsCommandOutput;
+  return response.Contents?.map((file) => file.Key || "") || [];
 };
 
 export const uploadToS3 = async (filename: string): Promise<void> => {
