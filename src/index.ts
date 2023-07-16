@@ -6,7 +6,7 @@ const port = 3000;
 
 app.use(express.json());
 
-app.post("/download", async (req, res) => {
+app.post("/", async (req, res) => {
   const url = req.body.url;
   try {
     const exists = await downloadFromYoutube(url);
@@ -16,7 +16,7 @@ app.post("/download", async (req, res) => {
   }
 });
 
-app.get("/healthcheck", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
