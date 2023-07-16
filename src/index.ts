@@ -7,16 +7,8 @@ const app = express();
 const port = 3000;
 const host = "0.0.0.0";
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 let downloadQueue: string[] = [];
 let isDownloading = false;
-
-process.on("uncaughtException", (error) => {
-  console.error(error);
-  process.exit(1);
-});
 
 const processQueue = async () => {
   if (isDownloading) {
@@ -37,6 +29,10 @@ const processQueue = async () => {
   processQueue();
 };
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// prevents machines from running indefinitely
 setInterval(() => {
   if (!isDownloading && downloadQueue.length === 0) {
     process.exit(0);
@@ -74,4 +70,9 @@ app.get("/files", async (req, res) => {
 
 app.listen(port, host, () => {
   console.log(`App listening at http://${host}:${port}`);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error(error);
+  process.exit(1);
 });
