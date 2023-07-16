@@ -27,12 +27,16 @@ app.get("/", (req, res) => {
 app.get("/files", async (req, res) => {
   try {
     const files = await listFilesInS3();
-    let html = '<table>';
-    files.forEach(file => {
-      html += `<tr><td>${file}</td></tr>`;
-    });
-    html += '</table>';
-    res.send(html);
+    if (files.length === 0) {
+      res.send("No files");
+    } else {
+      let html = '<table>';
+      files.forEach(file => {
+        html += `<tr><td>${file}</td></tr>`;
+      });
+      html += '</table>';
+      res.send(html);
+    }
   } catch (error) {
     res.send("ERROR");
   }
