@@ -1,11 +1,13 @@
 import { Upload } from "@aws-sdk/lib-storage";
-import { S3 } from "@aws-sdk/client-s3";
+import { CompleteMultipartUploadCommand, S3Client } from "@aws-sdk/client-s3";
 import fs from "fs";
 import "./envVars";
 
-const s3 = new S3({
-  accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.ACCESS_KEY_SECRET,
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.ACCESS_KEY_SECRET,
+  },
   endpoint: process.env.S3_ENDPOINT,
   region: process.env.S3_REGION,
 });
@@ -23,9 +25,11 @@ export const uploadToS3 = async (filename: string): Promise<void> => {
     console.log(`Starting upload to S3 for file: ${filename}`);
     const data = await new Upload({
       client: s3,
-      params
+      params,
     }).done();
-    console.log(`File uploaded successfully. S3 Location: ${data.Location}`);
+    if (data instanceof CompleteMultipartUploadCommand && "Location" in data) {
+      console.log(`File uploaded successfully. S3 location: ${data.Location}`);
+    }
   } catch (err) {
     console.error(`Error uploading file: ${err}`);
   }
