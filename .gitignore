@@ -3,3 +3,8 @@ node_modules
 .DS_Store
 *.mp3
 *.webm
+.aider.chat.history.md
+.aider.input.history
+.aider.ident.cache.v1
+.aider.tags.cache.v1
+yarn.lock
