@@ -5,8 +5,6 @@ node_modules
 *.webm
 .aider.ident.cache.v1
 .aider.tags.cache.v1
+.aider.chat.history.md
+.aider.input.history
 yarn.lock
-
-# committing these for now just to show how this came together
-# .aider.chat.history.md
-# .aider.input.history
