@@ -5,6 +5,7 @@
   "description": "A web app that downloads MP3s from YouTube and saves them to an S3 bucket",
   "main": "src/index.ts",
   "scripts": {
+    "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
     "test": "tsx src/test.ts",
     "deploy": "fly deploy"
