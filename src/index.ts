@@ -10,7 +10,7 @@ const host = '0.0.0.0';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let downloadQueue = [];
+let downloadQueue: string[] = [];
 let isDownloading = false;
 
 const processQueue = async () => {
