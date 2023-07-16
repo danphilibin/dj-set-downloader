@@ -8,7 +8,8 @@
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
     "test": "tsx src/test.ts",
-    "deploy": "fly deploy"
+    "deploy": "fly deploy",
+    "setup": "./setup.sh"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.50.0",
