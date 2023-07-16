@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { downloadFromYoutube } from "./youtube";
+import { listFilesInS3 } from "./upload";
 
 const app = express();
 const port = 3000;
@@ -21,6 +22,20 @@ app.post("/", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.status(200).send("OK");
+});
+
+app.get("/files", async (req, res) => {
+  try {
+    const files = await listFilesInS3();
+    let html = '<table>';
+    files.forEach(file => {
+      html += `<tr><td>${file}</td></tr>`;
+    });
+    html += '</table>';
+    res.send(html);
+  } catch (error) {
+    res.send("ERROR");
+  }
 });
 
 app.listen(port, host, () => {
