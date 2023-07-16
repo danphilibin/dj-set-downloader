@@ -23,7 +23,7 @@ const processQueue = async () => {
     return;
   }
   if (downloadQueue.length === 0) {
-    process.exit(0);
+    return;
   }
   isDownloading = true;
   const url = downloadQueue[0];
@@ -36,6 +36,12 @@ const processQueue = async () => {
   isDownloading = false;
   processQueue();
 };
+
+setInterval(() => {
+  if (!isDownloading && downloadQueue.length === 0) {
+    process.exit(0);
+  }
+}, 30000);
 
 app.post("/", (req, res) => {
   const url = req.body.url;
