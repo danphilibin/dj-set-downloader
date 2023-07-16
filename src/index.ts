@@ -7,6 +7,7 @@ const port = 3000;
 const host = "0.0.0.0";
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/", async (req, res) => {
   const url = req.body.url;
