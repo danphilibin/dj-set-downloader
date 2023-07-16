@@ -3,7 +3,6 @@ import { downloadFromYoutube } from "./youtube";
 
 const app = express();
 const port = 3000;
-const host = "0.0.0.0";
 
 app.use(express.json());
 
@@ -21,6 +20,6 @@ app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
 });
 
-app.listen(port, host, () => {
-  console.log(`App listening at http://${host}:${port}`);
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
 });
