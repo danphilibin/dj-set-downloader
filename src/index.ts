@@ -36,13 +36,13 @@ const processQueue = async () => {
     console.log("⬇️ Downloading: ", url);
     await downloadFromYoutube(url);
     console.log("✅ Downloaded: ", url);
-  } catch (error) {
-    console.error(`🚨 Error downloading: ${error}`);
+  } catch (error: any) {
+    console.error(`🚨 Error downloading: ${error.message}`);
 
     await sendEmail({
       to: "dan@danphilibin.com",
       subject: "[dj-set-downloader] Error downloading video",
-      messageBody: `Error downloading video: ${error}`,
+      messageBody: `Error downloading video: ${error.message}`,
     });
   }
   downloadQueue.delete(url);
@@ -96,6 +96,10 @@ app.get("/files", async (req, res) => {
 
 app.get("/queue", (req, res) => {
   res.send(JSON.stringify(Array.from(downloadQueue), null, 2));
+});
+
+app.get("/stop", (req, res) => {
+  process.exit(0);
 });
 
 app.listen(port, host, () => {
