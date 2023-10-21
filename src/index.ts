@@ -10,27 +10,35 @@ const host = "0.0.0.0";
 let downloadQueue: string[] = [];
 let isDownloading = false;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const processQueue = async () => {
   if (isDownloading) {
+    console.log("Already downloading");
     return;
   }
   if (downloadQueue.length === 0) {
+    console.log("Nothing to download");
     return;
   }
+
+  console.log(`Processing queue:`, JSON.stringify(downloadQueue, null, 2));
+
   isDownloading = true;
   const url = downloadQueue[0];
+
   try {
+    console.log("⬇️ Downloading: ", url);
     await downloadFromYoutube(url);
+    console.log("✅ Downloaded: ", url);
     downloadQueue = downloadQueue.slice(1);
   } catch (error) {
-    console.error(`Error downloading: ${error}`);
+    console.error(`🚨 Error downloading: ${error}`);
   }
   isDownloading = false;
   processQueue();
 };
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // prevents machines from running indefinitely
 setInterval(() => {
@@ -39,15 +47,19 @@ setInterval(() => {
   }
 }, 30000);
 
-app.post("/", (req, res) => {
+app.post("/", async (req, res) => {
   const url = req.body.url;
   downloadQueue.push(url);
+  console.log(`⌛ Added to queue: ${url}`);
+
   processQueue();
+
+  // must return quickly so the shortcut can exit
   res.json({ message: "Download started" });
 });
 
 app.get("/", (req, res) => {
-  res.status(200).send("OK");
+  res.status(200).send(JSON.stringify(downloadQueue, null, 2));
 });
 
 app.get("/files", async (req, res) => {
