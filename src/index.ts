@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { downloadFromYoutube } from "./youtube";
 import { listFilesInS3 } from "./upload";
+import { sendEmail } from "./mailer";
 
 const app = express();
 const port = 3000;
@@ -35,6 +36,12 @@ const processQueue = async () => {
     downloadQueue = downloadQueue.slice(1);
   } catch (error) {
     console.error(`🚨 Error downloading: ${error}`);
+
+    await sendEmail({
+      to: "dan@danphilibin.com",
+      subject: "[dj-set-downloader] Error downloading video",
+      messageBody: `Error downloading video: ${error}`,
+    });
   }
   isDownloading = false;
   processQueue();
@@ -47,9 +54,15 @@ setInterval(() => {
   }
 }, 30000);
 
+function addToQueue(url: string) {
+  if (!downloadQueue.includes(url)) {
+    downloadQueue.push(url);
+  }
+}
+
 app.post("/", async (req, res) => {
   const url = req.body.url;
-  downloadQueue.push(url);
+  addToQueue(url);
   console.log(`⌛ Added to queue: ${url}`);
 
   processQueue();
@@ -59,7 +72,7 @@ app.post("/", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.status(200).send(JSON.stringify(downloadQueue, null, 2));
+  res.status(200).send("OK");
 });
 
 app.get("/files", async (req, res) => {
@@ -78,6 +91,10 @@ app.get("/files", async (req, res) => {
   } catch (error) {
     res.send("ERROR");
   }
+});
+
+app.get("/queue", (req, res) => {
+  res.send(JSON.stringify(downloadQueue, null, 2));
 });
 
 app.listen(port, host, () => {

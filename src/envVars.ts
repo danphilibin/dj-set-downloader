@@ -7,6 +7,7 @@ const envVars = z.object({
   BUCKET_NAME: z.string(),
   S3_ENDPOINT: z.string().optional(),
   S3_REGION: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
 });
 
 // throws if vars are missing
