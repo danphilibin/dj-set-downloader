@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 const host = "0.0.0.0";
 
-let downloadQueue: string[] = [];
+let downloadQueue: Set<string> = new Set();
 let isDownloading = false;
 
 app.use(bodyParser.json());
@@ -19,21 +19,24 @@ const processQueue = async () => {
     console.log("Already downloading");
     return;
   }
-  if (downloadQueue.length === 0) {
+  if (downloadQueue.size === 0) {
     console.log("Nothing to download");
     return;
   }
 
-  console.log(`Processing queue:`, JSON.stringify(downloadQueue, null, 2));
+  console.log(
+    `Processing queue:`,
+    JSON.stringify(Array.from(downloadQueue), null, 2)
+  );
 
   isDownloading = true;
-  const url = downloadQueue[0];
+  const url = downloadQueue.values().next().value;
 
   try {
     console.log("⬇️ Downloading: ", url);
     await downloadFromYoutube(url);
     console.log("✅ Downloaded: ", url);
-    downloadQueue = downloadQueue.slice(1);
+    downloadQueue.delete(url);
   } catch (error) {
     console.error(`🚨 Error downloading: ${error}`);
 
@@ -49,15 +52,13 @@ const processQueue = async () => {
 
 // prevents machines from running indefinitely
 setInterval(() => {
-  if (!isDownloading && downloadQueue.length === 0) {
+  if (!isDownloading && downloadQueue.size === 0) {
     process.exit(0);
   }
 }, 30000);
 
 function addToQueue(url: string) {
-  if (!downloadQueue.includes(url)) {
-    downloadQueue.push(url);
-  }
+  downloadQueue.add(url);
 }
 
 app.post("/", async (req, res) => {
@@ -94,7 +95,7 @@ app.get("/files", async (req, res) => {
 });
 
 app.get("/queue", (req, res) => {
-  res.send(JSON.stringify(downloadQueue, null, 2));
+  res.send(JSON.stringify(Array.from(downloadQueue), null, 2));
 });
 
 app.listen(port, host, () => {
