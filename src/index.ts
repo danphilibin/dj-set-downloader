@@ -36,7 +36,6 @@ const processQueue = async () => {
     console.log("⬇️ Downloading: ", url);
     await downloadFromYoutube(url);
     console.log("✅ Downloaded: ", url);
-    downloadQueue.delete(url);
   } catch (error) {
     console.error(`🚨 Error downloading: ${error}`);
 
@@ -46,6 +45,7 @@ const processQueue = async () => {
       messageBody: `Error downloading video: ${error}`,
     });
   }
+  downloadQueue.delete(url);
   isDownloading = false;
   processQueue();
 };
